@@ -1,9 +1,13 @@
 const express = require("express");
 const hb = require("express-handlebars");
 var cookieSession = require("cookie-session");
+const csurf = require("csurf");
 const app = express();
 const { addSignature, getSignature, showSignature } = require("./db.js");
-// const { decodeBase64 } = require("bcryptjs");
+const {
+    superCookieSecret,
+    theOlderaCookieAgesTheBetter,
+} = require("./secrets.json");
 
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
@@ -11,12 +15,17 @@ app.set("view engine", "handlebars");
 app.use(express.static("./public"));
 app.use(
     cookieSession({
-        secret: `carolingian Renaissance`,
-        maxAge: 1000 * 60 * 60 * 24 * 14,
+        secret: `${superCookieSecret}`,
+        maxAge: `${theOlderaCookieAgesTheBetter}`,
     })
 );
 app.use(express.urlencoded({ extended: false }));
-
+app.use(csurf());
+app.use(function (req, res, next) {
+    res.set("x-frame-options", "deny");
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
 app.get("/", (req, res) => {
     res.redirect("/petition");
 });
