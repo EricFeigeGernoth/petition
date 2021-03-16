@@ -15,6 +15,13 @@ db.query("SELECT * FROM signature").then((result) => {
 //     return db.query("SELECT * FROM signature");
 // };
 
+module.exports.addSignInData = function (first, last, email, hashedpassword) {
+    return db.query(
+        `INSERT INTO users (first, last, email, password) VALUES ($1, $2, $3, $4) RETURNING id`,
+        [first, last, email, hashedpassword]
+    );
+};
+
 module.exports.addSignature = function (firstName, lastName, signature) {
     return db.query(
         `INSERT INTO signature (first_name, last_name, signature) VALUES ($1, $2, $3) RETURNING id`,

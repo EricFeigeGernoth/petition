@@ -1,9 +1,15 @@
 const express = require("express");
 const hb = require("express-handlebars");
-var cookieSession = require("cookie-session");
+const cookieSession = require("cookie-session");
+const { hash, compare } = require("./bc");
 const csurf = require("csurf");
 const app = express();
-const { addSignature, getSignature, showSignature } = require("./db.js");
+const {
+    addSignature,
+    getSignature,
+    showSignature,
+    addSignInData,
+} = require("./db.js");
 const {
     superCookieSecret,
     theOlderaCookieAgesTheBetter,
@@ -27,9 +33,55 @@ app.use(function (req, res, next) {
     next();
 });
 app.get("/", (req, res) => {
-    res.redirect("/petition");
+    res.redirect("/login");
 });
 
+app.get("/login", (req, res) => {
+    res.render("login", {
+        layout: "main",
+        title: "login",
+    });
+});
+app.get("/signin", (req, res) => {
+    res.render("signin", {
+        layout: "main",
+        title: "signin",
+    });
+});
+
+app.post("/signin", (req, res) => {
+    console.log(req.body);
+    const { first_name, last_name, email, password } = req.body;
+    let hashedPassword = hash(password);
+    hash(password).then((hashedPassword) => {
+        console.log("password: ", password);
+        console.log("hashedPassword: ", hashedPassword);
+        addSignInData(first_name, last_name, email, hashedPassword).then(
+            (data) => {
+                console.log(data);
+            }
+        );
+    });
+});
+
+// we want to run the hash function
+
+// const userPass = "12345";
+// hash(userPass).then((hash) => {
+//     console.log("the hashed password ist: ", hash);
+// });
+
+// app.post("/login", (req, res) => {
+//     const userPasswordFromBody = "12345";
+//     const demoHash = "0dfajoho123490134rhofansdlf";
+//     compare(userPasswordFromBody, demoHash).then((match) => {
+//         //match is a boolean.... will return if the passwords match and false if they do
+//         console.log("match: ", match);
+//     });
+//     // take the users email from the body, use it to look upt the hashed pas
+//     //password from our users table
+//     // then we have the pass word from req. body and a hashed body
+// });
 app.get("/petition", (req, res) => {
     // console.log("req.method: ", req.method);
     // console.log("req.url: ", req.url);
