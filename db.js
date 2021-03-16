@@ -22,6 +22,10 @@ module.exports.addSignInData = function (first, last, email, hashedpassword) {
     );
 };
 
+module.exports.getLogInData = function (email) {
+    return db.query(`SELECT password FROM users WHERE email = $1;`, [email]);
+};
+
 module.exports.addSignature = function (firstName, lastName, signature) {
     return db.query(
         `INSERT INTO signature (first_name, last_name, signature) VALUES ($1, $2, $3) RETURNING id`,

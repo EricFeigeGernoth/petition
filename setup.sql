@@ -1,4 +1,5 @@
-
+DROP TABLE IF EXISTS signature;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE signature (
     id SERIAL PRIMARY KEY,

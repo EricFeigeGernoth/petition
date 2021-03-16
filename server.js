@@ -9,6 +9,7 @@ const {
     getSignature,
     showSignature,
     addSignInData,
+    getLogInData,
 } = require("./db.js");
 const {
     superCookieSecret,
@@ -42,6 +43,21 @@ app.get("/login", (req, res) => {
         title: "login",
     });
 });
+
+app.post("/login", (req, res) => {
+    const { email, password } = req.body;
+    console.log(email);
+    console.log(password);
+    getLogInData(email).then((usersPassword) => {
+        console.log("usersPassword: ", usersPassword.rows[0].password);
+        compare(`${password}`, `${usersPassword.rows[0].password}`).then(
+            (match) => {
+                console.log(match);
+            }
+        );
+    });
+});
+
 app.get("/signin", (req, res) => {
     res.render("signin", {
         layout: "main",
@@ -50,7 +66,7 @@ app.get("/signin", (req, res) => {
 });
 
 app.post("/signin", (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     const { first_name, last_name, email, password } = req.body;
     let hashedPassword = hash(password);
     hash(password).then((hashedPassword) => {
@@ -58,30 +74,15 @@ app.post("/signin", (req, res) => {
         console.log("hashedPassword: ", hashedPassword);
         addSignInData(first_name, last_name, email, hashedPassword).then(
             (data) => {
-                console.log(data);
+                // console.log(data);
+                req.session.userId = data.rows[0].id;
+                console.log("req.session.userId:   ", req.session.userId);
+                res.redirect("/login");
             }
         );
     });
 });
 
-// we want to run the hash function
-
-// const userPass = "12345";
-// hash(userPass).then((hash) => {
-//     console.log("the hashed password ist: ", hash);
-// });
-
-// app.post("/login", (req, res) => {
-//     const userPasswordFromBody = "12345";
-//     const demoHash = "0dfajoho123490134rhofansdlf";
-//     compare(userPasswordFromBody, demoHash).then((match) => {
-//         //match is a boolean.... will return if the passwords match and false if they do
-//         console.log("match: ", match);
-//     });
-//     // take the users email from the body, use it to look upt the hashed pas
-//     //password from our users table
-//     // then we have the pass word from req. body and a hashed body
-// });
 app.get("/petition", (req, res) => {
     // console.log("req.method: ", req.method);
     // console.log("req.url: ", req.url);
@@ -132,6 +133,8 @@ app.get("/signer", (req, res) => {
     });
 });
 
+app.listen(8080, () => console.log("porty listening on port 8080"));
+
 // app.get("/", (req, res) => {
 //     getCities().then((data) => {
 //         res.json({ success: true, rows: data.rows });
@@ -148,5 +151,3 @@ app.get("/signer", (req, res) => {
 // app.get("/signers", (req, res) => {
 //     res.render;
 // });
-
-app.listen(8080, () => console.log("porty listening on port 8080"));
