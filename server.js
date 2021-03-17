@@ -54,42 +54,51 @@ app.post("/login", (req, res) => {
     console.log(email);
     console.log(password);
     getLogInData(email)
-        .then((data) => {
-            console.log(data);
+        .then((usersData) => {
+            console.log(usersData);
             // console.log("data: ", data.rows[0].password);
-            compare(`${password}`, `${data.rows[0].password}`)
-                .then((match) => {
-                    console.log("Right password");
-                    req.session.userId = data.rows[0].id;
-                    console.log("data.rows[0].id: ", data.rows[0].id);
-                    getSigId(data.rows[0].id)
-                        .then((sig) => {
-                            console.log("login sig.rows:", sig.rows[0]);
-                            if (sig.rows[0] == undefined) {
-                                console.log("Petition has to be still done");
-                                res.redirect("/petition");
-                            } else {
-                                console.log("Petition has already been done");
-                                req.session.signatureId = sig.rows[0].user_id;
-                                // console.log(
-                                //     "login signatureId",
-                                //     req.session.signatureId
-                                // );
-                                res.redirect("/thanks");
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err);
+            compare(`${password}`, `${usersData.rows[0].password}`).then(
+                (match) => {
+                    if (match) {
+                        console.log("Right password");
+                        req.session.userId = usersData.rows[0].id;
+                        console.log("data.rows[0].id: ", usersData.rows[0].id);
+                        getSigId(usersData.rows[0].id)
+                            .then((signatureData) => {
+                                console.log(
+                                    "login signatureData.rows:",
+                                    signatureData.rows[0]
+                                );
+                                if (signatureData.rows[0] == undefined) {
+                                    console.log(
+                                        "Petition has to be still done"
+                                    );
+                                    res.redirect("/petition");
+                                } else {
+                                    console.log(
+                                        "Petition has already been done"
+                                    );
+                                    req.session.signatureId =
+                                        signatureData.rows[0].user_id;
+                                    // console.log(
+                                    //     "login signatureId",
+                                    //     req.session.signatureId
+                                    // );
+                                    res.redirect("/thanks");
+                                }
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    } else {
+                        res.render("login", {
+                            layout: "main",
+                            title: "login",
+                            wrongPassword: true,
                         });
-                })
-                .catch((err) => {
-                    console.log("error", err);
-                    res.render("login", {
-                        layout: "main",
-                        title: "login",
-                        wrongPassword: true,
-                    });
-                });
+                    }
+                }
+            );
         })
         .catch((err) => {
             console.log("error", err);
@@ -123,11 +132,11 @@ app.post("/signin", (req, res) => {
             console.log("password: ", password);
             // console.log("hashedPassword: ", hashedPassword);
             addSignInData(first_name, last_name, email, hashedPassword)
-                .then((data) => {
-                    // console.log(data);
-                    req.session.userId = data.rows[0].id;
+                .then((usersData) => {
+                    // console.log(usersData);
+                    req.session.userId = usersData.rows[0].id;
                     console.log("req.session.userId:   ", req.session.userId);
-                    res.redirect("/login");
+                    res.redirect("/login"); //vielleicht falsch
                 })
                 .catch((err) => {
                     console.log("error", err);
@@ -159,18 +168,30 @@ app.post("/petition", (req, res) => {
     // console.log("res.body: ", req.body);
     console.log("petition start userId", req.session.userId);
     const user = req.session.userId;
+    console.log("petition !!!!!req.body", req.body);
     const { signature, timestamp } = req.body;
-    addSignature(user, signature, timestamp).then((data) => {
-        console.log("data", data);
-        // console.log("petition datarows: ", data.rows);
-        // console.log("req.session: ", req.session);
-        req.session.signatureId = data.rows[0].id;
-        console.log(
-            "petition req.session.signatureId: ",
-            req.session.signatureId
-        );
-        res.redirect("/thanks");
-    });
+    console.log("signature", signature);
+
+    if (signature === "") {
+        console.log("signature undefined");
+        res.render("petition", {
+            layout: "main",
+            title: "petition",
+            noSignature: true,
+        });
+    } else {
+        addSignature(user, signature, timestamp).then((signatureData) => {
+            console.log("signatureData", signatureData);
+            // console.log("petition signatureDatarows: ", signatureData.rows);
+            // console.log("req.session: ", req.session);
+            req.session.signatureId = signatureData.rows[0].user_id; //Returns ID from signature Not User_id
+            console.log(
+                "petition req.session.signatureId: ",
+                req.session.signatureId
+            );
+            res.redirect("/thanks");
+        });
+    }
 });
 
 app.get("/thanks", (req, res) => {

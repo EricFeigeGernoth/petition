@@ -11,4 +11,8 @@
 </form>
 <a href="/logout">Logout? Click here</a>
 
+ {{#if noSignature}}
+        {{>noSignature}}
+    {{/if}}
+
  {{!-- <input name="signature" type="hidden"/> --}}

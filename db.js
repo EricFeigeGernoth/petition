@@ -5,6 +5,7 @@ const db = spicedPg(
 );
 
 module.exports.addSignInData = function (first, last, email, hashedpassword) {
+    // return db.query(`DELETE FROM users`);
     return db.query(
         `INSERT INTO users (first, last, email, password) VALUES ($1, $2, $3, $4) RETURNING id`,
         [first, last, email, hashedpassword]
@@ -19,7 +20,7 @@ module.exports.getLogInData = function (email) {
 
 module.exports.addSignature = function (user, signature) {
     return db.query(
-        `INSERT INTO signature (user_id, signature) VALUES ($1, $2) RETURNING id`,
+        `INSERT INTO signature (user_id, signature) VALUES ($1, $2) RETURNING user_id`,
         [user, signature]
     );
 };
