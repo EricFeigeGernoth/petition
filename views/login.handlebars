@@ -16,4 +16,11 @@
     <button id="loginButton" type="submit">Submit</button>
 </form>
 
+{{#if noEmail}}
+        {{>noEmailFound}}
+    {{/if}}
+{{#if wrongPassword}}
+        {{>wrongPassword}}
+    {{/if}}
+
 <a href="./signin">If you don't already have an account sign in here</a>

@@ -1,6 +1,9 @@
 
 <p>Welcome to the signin Page</p>
 
+
+
+
 <form method="POST">
     <label>Please input your first name<input name="first_name"/></label>
     <label>Please input your last name <input name="last_name"/></label>
@@ -11,6 +14,12 @@
     <label >Please input your password<input name="password" type="password"/></label>
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
 
+    {{#if empty}}
+        {{>emptyFields}}
+    {{/if}}
+    {{#if doubleEmail}}
+        {{>emailDuplicated}}
+    {{/if}}
     
     <button id="signinButton" type="submit">Submit</button>
 </form>

@@ -53,38 +53,52 @@ app.post("/login", (req, res) => {
     const { email, password } = req.body;
     console.log(email);
     console.log(password);
-    getLogInData(email).then((data) => {
-        // console.log(data);
-        // console.log("data: ", data.rows[0].password);
-        compare(`${password}`, `${data.rows[0].password}`).then((match) => {
-            if (match) {
-                console.log("Right password");
-                req.session.userId = data.rows[0].id;
-                console.log("data.rows[0].id: ", data.rows[0].id);
-                getSigId(data.rows[0].id)
-                    .then((sig) => {
-                        console.log("login sig.rows:", sig.rows[0]);
-                        if (sig.rows[0] == undefined) {
-                            console.log("Petition has to be still done");
-                            res.redirect("/petition");
-                        } else {
-                            console.log("Petition has already been done");
-                            req.session.signatureId = sig.rows[0].user_id;
-                            console.log(
-                                "login signatureId",
-                                req.session.signatureId
-                            );
-                            res.redirect("/thanks");
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err);
+    getLogInData(email)
+        .then((data) => {
+            console.log(data);
+            // console.log("data: ", data.rows[0].password);
+            compare(`${password}`, `${data.rows[0].password}`)
+                .then((match) => {
+                    console.log("Right password");
+                    req.session.userId = data.rows[0].id;
+                    console.log("data.rows[0].id: ", data.rows[0].id);
+                    getSigId(data.rows[0].id)
+                        .then((sig) => {
+                            console.log("login sig.rows:", sig.rows[0]);
+                            if (sig.rows[0] == undefined) {
+                                console.log("Petition has to be still done");
+                                res.redirect("/petition");
+                            } else {
+                                console.log("Petition has already been done");
+                                req.session.signatureId = sig.rows[0].user_id;
+                                // console.log(
+                                //     "login signatureId",
+                                //     req.session.signatureId
+                                // );
+                                res.redirect("/thanks");
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                })
+                .catch((err) => {
+                    console.log("error", err);
+                    res.render("login", {
+                        layout: "main",
+                        title: "login",
+                        wrongPassword: true,
                     });
-            } else {
-                console.log("Wrong password");
-            }
+                });
+        })
+        .catch((err) => {
+            console.log("error", err);
+            res.render("login", {
+                layout: "main",
+                title: "login",
+                noEmail: true,
+            });
         });
-    });
 });
 
 app.get("/signin", (req, res) => {
@@ -97,19 +111,34 @@ app.get("/signin", (req, res) => {
 app.post("/signin", (req, res) => {
     // console.log(req.body);
     const { first_name, last_name, email, password } = req.body;
-    let hashedPassword = hash(password);
-    hash(password).then((hashedPassword) => {
-        console.log("password: ", password);
-        console.log("hashedPassword: ", hashedPassword);
-        addSignInData(first_name, last_name, email, hashedPassword).then(
-            (data) => {
-                // console.log(data);
-                req.session.userId = data.rows[0].id;
-                console.log("req.session.userId:   ", req.session.userId);
-                res.redirect("/login");
-            }
-        );
-    });
+    if (first_name == "" || last_name == "" || email == "" || password == "") {
+        res.render("signin", {
+            layout: "main",
+            title: "signin",
+            empty: true,
+        });
+    } else {
+        let hashedPassword = hash(password);
+        hash(password).then((hashedPassword) => {
+            console.log("password: ", password);
+            // console.log("hashedPassword: ", hashedPassword);
+            addSignInData(first_name, last_name, email, hashedPassword)
+                .then((data) => {
+                    // console.log(data);
+                    req.session.userId = data.rows[0].id;
+                    console.log("req.session.userId:   ", req.session.userId);
+                    res.redirect("/login");
+                })
+                .catch((err) => {
+                    console.log("error", err);
+                    res.render("signin", {
+                        layout: "main",
+                        title: "signin",
+                        doubleEmail: true,
+                    });
+                });
+        });
+    }
 });
 
 app.get("/petition", (req, res) => {
@@ -132,7 +161,7 @@ app.post("/petition", (req, res) => {
     const user = req.session.userId;
     const { signature, timestamp } = req.body;
     addSignature(user, signature, timestamp).then((data) => {
-        // console.log("data", data);
+        console.log("data", data);
         // console.log("petition datarows: ", data.rows);
         // console.log("req.session: ", req.session);
         req.session.signatureId = data.rows[0].id;
@@ -180,20 +209,3 @@ app.get("/logout", (req, res) => {
 });
 
 app.listen(8080, () => console.log("porty listening on port 8080"));
-
-// app.get("/", (req, res) => {
-//     getCities().then((data) => {
-//         res.json({ success: true, rows: data.rows });
-//     });
-// });
-
-// app.post("/", (req, res) => {
-//     const { name, country } = req.body;
-//     addCity(name, country).then((data) => console.log(data));
-// });
-
-// app.get("petition", (req, res) => {});
-
-// app.get("/signers", (req, res) => {
-//     res.render;
-// });
