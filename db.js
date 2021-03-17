@@ -23,17 +23,23 @@ module.exports.addSignInData = function (first, last, email, hashedpassword) {
 };
 
 module.exports.getLogInData = function (email) {
-    return db.query(`SELECT password FROM users WHERE email = $1;`, [email]);
+    return db.query(`SELECT password, id FROM users WHERE email = $1;`, [
+        email,
+    ]);
 };
 
-module.exports.addSignature = function (firstName, lastName, signature) {
+module.exports.addSignature = function (user, signature) {
     return db.query(
-        `INSERT INTO signature (first_name, last_name, signature) VALUES ($1, $2, $3) RETURNING id`,
-        [firstName, lastName, signature]
+        `INSERT INTO signature (user_id, signature) VALUES ($1, $2) RETURNING id`,
+        [user, signature]
     );
 };
 module.exports.getSignature = function () {
-    return db.query("SELECT * FROM signature");
+    return db.query("SELECT * FROM users");
+};
+
+module.exports.getSigId = function (userId) {
+    return db.query(`SELECT * FROM signature WHERE user_id = $1;`, [userId]);
 };
 
 module.exports.showSignature = function (sigID) {

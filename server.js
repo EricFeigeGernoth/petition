@@ -10,6 +10,7 @@ const {
     showSignature,
     addSignInData,
     getLogInData,
+    getSigId,
 } = require("./db.js");
 const {
     superCookieSecret,
@@ -38,23 +39,47 @@ app.get("/", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-    res.render("login", {
-        layout: "main",
-        title: "login",
-    });
+    if (req.session.userId) {
+        res.redirect("/petition");
+    } else {
+        res.render("login", {
+            layout: "main",
+            title: "login",
+        });
+    }
 });
 
 app.post("/login", (req, res) => {
     const { email, password } = req.body;
     console.log(email);
     console.log(password);
-    getLogInData(email).then((usersPassword) => {
-        console.log("usersPassword: ", usersPassword.rows[0].password);
-        compare(`${password}`, `${usersPassword.rows[0].password}`).then(
-            (match) => {
-                console.log(match);
+    getLogInData(email).then((data) => {
+        // console.log(data);
+        console.log("data: ", data.rows[0].password);
+        compare(`${password}`, `${data.rows[0].password}`).then((match) => {
+            if (match) {
+                console.log("Right password");
+                req.session.userId = data.rows[0].id;
+                console.log("data.rows[0].id: ", data.rows[0].id);
+                getSigId(data.rows[0].id)
+                    .then((sig) => {
+                        console.log("sig.rows:", sig.rows[0]);
+                        if (sig.rows[0] == undefined) {
+                            console.log("Petition has to be still done");
+                            res.redirect("/petition");
+                        } else {
+                            console.log("Petition has already been done");
+                            req.session.signatureId = sig.rows[0].userId;
+                            res.redirect("/thanks");
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            } else {
+                console.log("Wrong password");
             }
-        );
+        });
     });
 });
 
@@ -86,16 +111,23 @@ app.post("/signin", (req, res) => {
 app.get("/petition", (req, res) => {
     // console.log("req.method: ", req.method);
     // console.log("req.url: ", req.url);
-    res.render("petition", {
-        layout: "main",
-        title: "petition",
-    });
+    console.log("userID", req.session.userId);
+    if (req.session.signatureId) {
+        res.redirect("/thanks");
+    } else {
+        res.render("petition", {
+            layout: "main",
+            title: "petition",
+        });
+    }
 });
 
 app.post("/petition", (req, res) => {
     // console.log("res.body: ", req.body);
-    const { first_name, last_name, signature, timestamp } = req.body;
-    addSignature(first_name, last_name, signature, timestamp).then((data) => {
+    console.log(req.session.userId);
+    const user = req.session.userId;
+    const { signature, timestamp } = req.body;
+    addSignature(user, signature, timestamp).then((data) => {
         console.log("data", data);
         console.log("datarows: ", data.rows);
         console.log("req.session: ", req.session);
@@ -115,8 +147,8 @@ app.get("/thanks", (req, res) => {
         res.render("thanks", {
             layout: "main",
             title: "thanks",
-            firstName: data.rows[0].first_name,
-            lastName: data.rows[0].last_name,
+            // firstName: data.rows[0].first_name,
+            // lastName: data.rows[0].last_name,
             imgURL: data.rows[0].signature,
         });
     });
@@ -131,6 +163,11 @@ app.get("/signer", (req, res) => {
             rows: data.rows,
         });
     });
+});
+
+app.get("/logout", (req, res) => {
+    req.session.userId = null;
+    res.redirect("/login");
 });
 
 app.listen(8080, () => console.log("porty listening on port 8080"));
