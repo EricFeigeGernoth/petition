@@ -24,8 +24,25 @@ module.exports.addSignature = function (user, signature) {
         [user, signature]
     );
 };
-module.exports.getSignature = function () {
-    return db.query("SELECT * FROM users");
+
+module.exports.getCity = function (city) {
+    return db.query(
+        `SELECT * FROM signature JOIN users ON signature.user_id=users.id LEFT JOIN user_profiles ON user_profiles.user_id = users.id WHERE city = $1;`,
+        [city]
+    );
+};
+
+module.exports.getSignerData = function () {
+    return db.query(
+        `SELECT * FROM signature JOIN users ON signature.user_id=users.id LEFT JOIN user_profiles ON user_profiles.user_id = users.id`
+    );
+    // return db.query(`SELECT *
+    //                     FROM signature
+    //                     JOIN users
+    //                     ON  signature.user_id = users.id
+    //                     JOIN user_profiles
+    //                     ON signature.user_id = user_profiles.user_id;`);
+    //returns only the completely filled out signer profils
 };
 
 module.exports.getSigId = function (userId) {
@@ -45,3 +62,10 @@ module.exports.insertProfile = function (age, city, homepage, userID) {
 };
 
 // "postgres:username:password@localhost/name-of-database"
+
+// SELECT signature.user_id
+// FROM signature
+// JOIN users
+// ON  signature.user_id = users.id
+// JOIN user_profiles
+// ON signature.user_id = user_profiles.user_id;

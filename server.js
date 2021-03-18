@@ -6,12 +6,13 @@ const csurf = require("csurf");
 const app = express();
 const {
     addSignature,
-    getSignature,
+    getSignerData,
     showSignature,
     addSignInData,
     getLogInData,
     getSigId,
     insertProfile,
+    getCity,
 } = require("./db.js");
 const {
     superCookieSecret,
@@ -246,10 +247,24 @@ app.get("/thanks", (req, res) => {
 });
 
 app.get("/signer", (req, res) => {
-    getSignature().then((data) => {
+    console.log("I am in the signer app");
+    getSignerData().then((data) => {
         res.render("signer", {
             layout: "main",
             title: "signer",
+            success: true,
+            rows: data.rows,
+        });
+    });
+});
+
+app.get("/signer/:city", (req, res) => {
+    console.log("I am in signer of a specific city");
+    const cities = req.params.city;
+    console.log("cities: ", cities);
+    getCity(cities).then((data) => {
+        res.render("city", {
+            layout: "main",
             success: true,
             rows: data.rows,
         });
