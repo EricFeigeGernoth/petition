@@ -35,8 +35,7 @@ canvas.addEventListener("mousemove", sicdraw);
 
 canvas.addEventListener("mouseup", function () {
     drawing = false;
-});
-
-button.addEventListener("click", function () {
     signature.value = canvas.toDataURL();
 });
+
+button.addEventListener("click", function () {});

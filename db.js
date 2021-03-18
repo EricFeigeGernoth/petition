@@ -37,4 +37,11 @@ module.exports.showSignature = function (sigID) {
     return db.query(`SELECT * FROM signature WHERE user_id = $1;`, [sigID]);
 };
 
+module.exports.insertProfile = function (age, city, homepage, userID) {
+    return db.query(
+        `INSERT INTO user_profiles (age, city, url, user_id) VALUES ($1, $2, $3, $4) RETURNING id`,
+        [age, city, homepage, userID]
+    );
+};
+
 // "postgres:username:password@localhost/name-of-database"

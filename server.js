@@ -11,6 +11,7 @@ const {
     addSignInData,
     getLogInData,
     getSigId,
+    insertProfile,
 } = require("./db.js");
 const {
     superCookieSecret,
@@ -136,7 +137,7 @@ app.post("/signin", (req, res) => {
                     // console.log(usersData);
                     req.session.userId = usersData.rows[0].id;
                     console.log("req.session.userId:   ", req.session.userId);
-                    res.redirect("/login"); //vielleicht falsch
+                    res.redirect("/profile"); //vielleicht falsch
                 })
                 .catch((err) => {
                     console.log("error", err);
@@ -147,6 +148,38 @@ app.post("/signin", (req, res) => {
                     });
                 });
         });
+    }
+});
+
+app.get("/profile", (req, res) => {
+    res.render("profile", {
+        layout: "main",
+        title: "profile",
+    });
+});
+
+app.post("/profile", (req, res) => {
+    console.log(req.body);
+    const user_id = req.session.userId;
+
+    const { age, city, homepage } = req.body;
+    const smallCity = city.toLowerCase();
+    const smallUrl = homepage.toLowerCase();
+    if (smallUrl.startsWith("https://") || smallUrl.startsWith("http://")) {
+        console.log("I am here in starts with http");
+        insertProfile(age, city, smallUrl, user_id).then((profileData) => {
+            console.log("Inside insertProfile");
+            res.redirect("/petition");
+        }); // error: insert or update on table "user_profiles" violates foreign key constraint "user_profiles_user_id_fkey"
+    } else {
+        const addedHttpHomepage = `https://${smallUrl}`;
+        console.log(addedHttpHomepage);
+        insertProfile(age, city, addedHttpHomepage, user_id).then(
+            (profileData) => {
+                console.log("Inside insertProfile");
+                res.redirect("/petition");
+            }
+        );
     }
 });
 
@@ -171,7 +204,7 @@ app.post("/petition", (req, res) => {
     console.log("petition !!!!!req.body", req.body);
     const { signature, timestamp } = req.body;
     console.log("signature", signature);
-
+    //signature string seems to be never empty
     if (signature === "") {
         console.log("signature undefined");
         res.render("petition", {
