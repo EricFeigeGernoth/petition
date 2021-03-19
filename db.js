@@ -61,6 +61,31 @@ module.exports.insertProfile = function (age, city, homepage, userID) {
     );
 };
 
+module.exports.getProfileData = function (userID) {
+    return db.query(
+        `SELECT users.first, users.last, users.email, user_profiles.age, user_profiles.city, user_profiles.url FROM users JOIN user_profiles ON users.id = user_profiles.user_id WHERE user_profiles.user_id =$1;`,
+        [userID]
+    );
+};
+
+module.exports.updateUsersWithoutPassword = function (first, last, email, id) {
+    db.query(
+        `UPDATE users SET first = $1, last = $2, email=$3 WHERE id = $4;`,
+        [first, last, email, id]
+    );
+};
+module.exports.updateUserWithPassword = function (
+    first,
+    last,
+    email,
+    password,
+    id
+) {
+    db.query(
+        `UPDATE users SET first = $1, last = $2, email=$3, password=$4 WHERE id = $5;`,
+        [first, last, email, password, id]
+    );
+};
 // "postgres:username:password@localhost/name-of-database"
 
 // SELECT signature.user_id

@@ -1,0 +1,23 @@
+<form method="POST">
+
+     <label>Please input your first name<input name="first_name" value='{{data.first}}'/></label>
+    <label>Please input your last name <input name="last_name" value='{{data.last}}'/></label>
+    
+    <label >Please input your email
+        <input name="email" value='{{data.email}}'/></label>
+    
+    <label >Please input your password<input name="password" type="password"/></label>
+    <label>Please input your age<input name="age"value='{{data.age}}'/></label>
+    <label>Please input your city <input name="city"value='{{data.city}}'/></label>
+    
+    <label >Please input your homepage
+        <input name="homepage"value='{{data.url}}'/></label>
+    
+  
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
+  
+    
+    <button id="signinButton" type="submit">Submit</button>
+</form>
+

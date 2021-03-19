@@ -13,6 +13,9 @@ const {
     getSigId,
     insertProfile,
     getCity,
+    getProfileData,
+    updateUsersWithoutPassword,
+    updateUserWithPassword,
 } = require("./db.js");
 const {
     superCookieSecret,
@@ -181,6 +184,55 @@ app.post("/profile", (req, res) => {
                 res.redirect("/petition");
             }
         );
+    }
+});
+
+app.get("/profile/edit", (req, res) => {
+    console.log("I am in the edit");
+    console.log("petition userID", req.session.userId);
+    getProfileData(req.session.userId).then((getedit) => {
+        console.log("getedit", getedit);
+
+        res.render("edit", {
+            layout: "main",
+            title: "edit",
+            data: getedit.rows[0],
+        });
+    });
+});
+
+app.post("/profile/edit", (req, res) => {
+    console.log("petition userID", req.session.userId);
+    const id = req.session.userId;
+    console.log("edit post body   ", req.body);
+    const {
+        first_name,
+        last_name,
+        email,
+        password,
+        age,
+        city,
+        homepage,
+    } = req.body;
+    console.log(email);
+    console.log(password);
+    if (password == false) {
+        console.log("password empty");
+        updateUsersWithoutPassword(first_name, last_name, email, id);
+        console.log("I am past update");
+    } else {
+        hash(password).then((hashedPassword) => {
+            console.log("hashedpassword:   ", hashedPassword);
+
+            updateUserWithPassword(
+                first_name,
+                last_name,
+                email,
+                hashedPassword,
+                id
+            );
+            console.log("Afer changing password");
+        });
     }
 });
 
