@@ -42,31 +42,49 @@ app.use(function (req, res, next) {
     next();
 });
 
-// app.use((req, res, next) => {
-//     if (!req.session.userId && req.url != "/register" && req.url != "login") {
-//         res.redirect("/register");
-//     }
-// });
+app.use((req, res, next) => {
+    // console.log("Am I here?");
+    if (!req.session.userId && req.url != "/signin" && req.url != "/login") {
+        // console.log("Am I before login?");
+        console.log("req.url: ", req.url);
+        try {
+            return res.redirect("/signin");
+        } catch (e) {
+            console.log("ERRORERROEREOROEROEORO", e);
+        }
+    }
+    next();
+});
 
-// const requireLoggedOutUser = (req, res, next) => {
-//     if (req.session.userId) {
-//         return res.redirect("/petition");
-//     }
-//     next();
-// };
+const requireLoggedOutUser = (req, res, next) => {
+    console.log("requireLoggedOutUser");
+    if (req.session.userId) {
+        return res.redirect("/petition");
+    }
+    next();
+};
 
-// const requireNosignature = (req, res, next) => {
-//     if (!req.session.sigId) {
-//         return res.redirect("/petition");
-//     }
-//     next();
-// };
+const requireNosignature = (req, res, next) => {
+    if (req.session.signatureId) {
+        console.log("Places only available without signature");
+        return res.redirect("/thanks");
+    }
+    next();
+};
 
-app.get("/", (req, res) => {
+const requireSignature = (req, res, next) => {
+    if (!req.session.signatureId) {
+        console.log("Signature Cokkie is required for this!");
+        return res.redirect("/petition");
+    }
+    next();
+};
+
+app.get("/", requireLoggedOutUser, (req, res) => {
     res.redirect("/login");
 });
 
-app.get("/login", (req, res) => {
+app.get("/login", requireLoggedOutUser, (req, res) => {
     if (req.session.userId) {
         res.redirect("/petition");
     } else {
@@ -77,7 +95,7 @@ app.get("/login", (req, res) => {
     }
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", requireLoggedOutUser, (req, res) => {
     const { email, password } = req.body;
     console.log(email);
     console.log(password);
@@ -138,14 +156,15 @@ app.post("/login", (req, res) => {
         });
 });
 
-app.get("/signin", (req, res) => {
+app.get("/signin", requireLoggedOutUser, (req, res) => {
+    console.log("Before or after the SET HEADER ERROR?");
     res.render("signin", {
         layout: "main",
         title: "signin",
     });
 });
 
-app.post("/signin", (req, res) => {
+app.post("/signin", requireLoggedOutUser, (req, res) => {
     // console.log(req.body);
     const { first_name, last_name, email, password } = req.body;
     if (first_name == "" || last_name == "" || email == "" || password == "") {
@@ -178,14 +197,14 @@ app.post("/signin", (req, res) => {
     }
 });
 
-app.get("/profile", (req, res) => {
+app.get("/profile", requireNosignature, (req, res) => {
     res.render("profile", {
         layout: "main",
         title: "profile",
     });
 });
 
-app.post("/profile", (req, res) => {
+app.post("/profile", requireNosignature, (req, res) => {
     console.log(req.body);
     const user_id = req.session.userId;
 
@@ -210,7 +229,7 @@ app.post("/profile", (req, res) => {
     }
 });
 
-app.get("/profile/edit", (req, res) => {
+app.get("/profile/edit", requireSignature, (req, res) => {
     console.log("I am in the edit");
     console.log("petition userID", req.session.userId);
     getProfileData(req.session.userId).then((getedit) => {
@@ -224,7 +243,7 @@ app.get("/profile/edit", (req, res) => {
     });
 });
 
-app.post("/profile/edit", (req, res) => {
+app.post("/profile/edit", requireSignature, (req, res) => {
     console.log("petition userID", req.session.userId);
     const id = req.session.userId;
     console.log("edit post body   ", req.body);
@@ -263,7 +282,7 @@ app.post("/profile/edit", (req, res) => {
     });
 });
 
-app.get("/petition", (req, res) => {
+app.get("/petition", requireNosignature, (req, res) => {
     // console.log("req.method: ", req.method);
     // console.log("req.url: ", req.url);
     console.log("petition userID", req.session.userId);
@@ -277,7 +296,7 @@ app.get("/petition", (req, res) => {
     }
 });
 
-app.post("/petition", (req, res) => {
+app.post("/petition", requireNosignature, (req, res) => {
     // console.log("res.body: ", req.body);
     console.log("petition start userId", req.session.userId);
     const user = req.session.userId;
@@ -307,7 +326,7 @@ app.post("/petition", (req, res) => {
     }
 });
 
-app.get("/thanks", (req, res) => {
+app.get("/thanks", requireSignature, (req, res) => {
     // console.log("req.method: ", req.method);
     // console.log("req.url: ", req.url);
     console.log("req.session object: ", req.session);
@@ -315,7 +334,7 @@ app.get("/thanks", (req, res) => {
     let sigID = req.session.signatureId;
     // console.log("sigID: !!!!!!!!!!!!", sigID);
     showSignature(sigID).then((data) => {
-        console.log("thanks data.rows:", data);
+        // console.log("thanks data.rows:", data);
         res.render("thanks", {
             layout: "main",
             title: "thanks",
@@ -326,7 +345,7 @@ app.get("/thanks", (req, res) => {
     });
 });
 
-app.post("/thanks", (req, res) => {
+app.post("/thanks", requireSignature, (req, res) => {
     req.session.signatureId;
     console.log("post thanks session.signatureId:  ", req.session.signatureId);
     deleteSignature(req.session.signatureId).then((data) => {
@@ -335,7 +354,7 @@ app.post("/thanks", (req, res) => {
     });
 });
 
-app.get("/signer", (req, res) => {
+app.get("/signer", requireSignature, (req, res) => {
     console.log("I am in the signer app");
     getSignerData().then((data) => {
         res.render("signer", {
@@ -347,7 +366,7 @@ app.get("/signer", (req, res) => {
     });
 });
 
-app.get("/signer/:city", (req, res) => {
+app.get("/signer/:city", requireSignature, (req, res) => {
     console.log("I am in signer of a specific city");
     const cities = req.params.city;
     console.log("cities: ", cities);
