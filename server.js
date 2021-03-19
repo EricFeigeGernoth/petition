@@ -16,6 +16,8 @@ const {
     getProfileData,
     updateUsersWithoutPassword,
     updateUserWithPassword,
+    updateProfile,
+    deleteSignature,
 } = require("./db.js");
 const {
     superCookieSecret,
@@ -39,6 +41,27 @@ app.use(function (req, res, next) {
     res.locals.csrfToken = req.csrfToken();
     next();
 });
+
+// app.use((req, res, next) => {
+//     if (!req.session.userId && req.url != "/register" && req.url != "login") {
+//         res.redirect("/register");
+//     }
+// });
+
+// const requireLoggedOutUser = (req, res, next) => {
+//     if (req.session.userId) {
+//         return res.redirect("/petition");
+//     }
+//     next();
+// };
+
+// const requireNosignature = (req, res, next) => {
+//     if (!req.session.sigId) {
+//         return res.redirect("/petition");
+//     }
+//     next();
+// };
+
 app.get("/", (req, res) => {
     res.redirect("/login");
 });
@@ -234,6 +257,10 @@ app.post("/profile/edit", (req, res) => {
             console.log("Afer changing password");
         });
     }
+    updateProfile(age, city, homepage, id).then((editedData) => {
+        console.log("editedData:  ", editedData);
+        res.redirect("/profile/edit");
+    });
 });
 
 app.get("/petition", (req, res) => {
@@ -283,6 +310,7 @@ app.post("/petition", (req, res) => {
 app.get("/thanks", (req, res) => {
     // console.log("req.method: ", req.method);
     // console.log("req.url: ", req.url);
+    console.log("req.session object: ", req.session);
     console.log("thanks req.session.signatureId: ", req.session.signatureId);
     let sigID = req.session.signatureId;
     // console.log("sigID: !!!!!!!!!!!!", sigID);
@@ -295,6 +323,15 @@ app.get("/thanks", (req, res) => {
             // lastName: data.rows[0].last_name,
             imgURL: data.rows[0].signature,
         });
+    });
+});
+
+app.post("/thanks", (req, res) => {
+    req.session.signatureId;
+    console.log("post thanks session.signatureId:  ", req.session.signatureId);
+    deleteSignature(req.session.signatureId).then((data) => {
+        req.session.signatureId = null;
+        res.redirect("/petition");
     });
 });
 

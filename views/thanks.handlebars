@@ -5,6 +5,16 @@
  <img src="{{imgURL}}" alt="signatureImage">
 
 
+
+
+<form method="POST">
+   
+    
+    <button id="deleteSignature" type="submit">Delete your signature</button>
+     <input type="hidden" name="_csrf" value="{{csrfToken}}">
+</form>
+
+
 <a href="/profile/edit">Would you like to change your profile?</a>
 <a href="/signer">Are you curious who already signed?</a>
 <a href="/logout">Logout? Click here</a>

@@ -26,7 +26,7 @@ CREATE TABLE signature (
     url VARCHAR(255), 
     -- whatever user_id we insert MUST exist in the 
     -- id column of the users table 
-    user_id INT NOT NULL REFERENCES users(id)
+    user_id INT UNIQUE NOT NULL REFERENCES users(id)
 );
 
 
