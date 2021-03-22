@@ -220,23 +220,31 @@ app.post("/profile", requireNosignature, (req, res) => {
     const user_id = req.session.userId;
 
     const { age, city, homepage } = req.body;
-    const smallCity = city.toLowerCase();
-    const smallUrl = homepage.toLowerCase();
-    if (smallUrl.startsWith("https://") || smallUrl.startsWith("http://")) {
-        console.log("I am here in starts with http");
-        insertProfile(age, city, smallUrl, user_id).then((profileData) => {
-            console.log("Inside insertProfile");
-            res.redirect("/petition");
-        }); // error: insert or update on table "user_profiles" violates foreign key constraint "user_profiles_user_id_fkey"
+    if (age == "" || city == "" || homepage == "") {
+        res.render("profile", {
+            layout: "main",
+            title: "signin",
+            empty: true,
+        });
     } else {
-        const addedHttpHomepage = `https://${smallUrl}`;
-        console.log(addedHttpHomepage);
-        insertProfile(age, city, addedHttpHomepage, user_id).then(
-            (profileData) => {
+        const smallCity = city.toLowerCase();
+        const smallUrl = homepage.toLowerCase();
+        if (smallUrl.startsWith("https://") || smallUrl.startsWith("http://")) {
+            console.log("I am here in starts with http");
+            insertProfile(age, city, smallUrl, user_id).then((profileData) => {
                 console.log("Inside insertProfile");
                 res.redirect("/petition");
-            }
-        );
+            }); // error: insert or update on table "user_profiles" violates foreign key constraint "user_profiles_user_id_fkey"
+        } else {
+            const addedHttpHomepage = `https://${smallUrl}`;
+            console.log(addedHttpHomepage);
+            insertProfile(age, city, addedHttpHomepage, user_id).then(
+                (profileData) => {
+                    console.log("Inside insertProfile");
+                    res.redirect("/petition");
+                }
+            );
+        }
     }
 });
 
