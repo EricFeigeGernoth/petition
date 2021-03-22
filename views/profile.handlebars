@@ -1,14 +1,23 @@
+
+<div class="edit">
+<div class="navBar"><div class="innerBar">{{> navBar ProfileAndSignature=true}}</div></div>
+
+<div class="editBox">
 <form method="POST">
-    <label>Please input your age<input name="age"/></label>
-    <label>Please input your city <input name="city"/></label>
+
+    <div class="editInputs"> <label>Please input your age<input class="input" name="age"/></label></div>
+    <div class="editInputs"><label>Please input your city <input class="input" name="city"/></label></div>
+    <div class="editInputs">  <label >Please input your homepage
+        <input class="input" name="homepage"/></label></div>
+   
     
-    <label >Please input your homepage
-        <input name="homepage"/></label>
+    
+  
     
   
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
 
   
     
-    <button id="signinButton" type="submit">Submit</button>
-</form>
+  <div class="profileEditButton"><button id="signinButton" type="submit">Submit</button></div>  
+</form></div></div>

@@ -1,7 +1,124 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
 h1 {
-    background-color: black;
+    font-size: large;
+}
+
+.titleHeader {
+    margin: 20px;
+    padding: 20px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 40px;
+    font-weight: 400;
+}
+
+.subTitle {
+    padding: 20px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 24px;
+    font-weight: 400;
 }
 
 #canvas {
     background-color: aquamarine;
 }
+
+.wholePage {
+    height: 100vh;
+    background-color: #bbbfca;
+}
+
+/* Edit Profile Part START!!!!Edit Profile Part START!!!!Edit Profile Part START!!!!Edit Profile Part START!!!!Edit Profile Part START!!!!*/
+
+.edit {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.editBox {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #495464;
+    border: black 2px solid;
+    /* border-radius: 20%; */
+}
+.editInputs {
+    padding: 5px;
+
+    border: gainsboro 2px, solid;
+    background-color: #495464;
+    display: block;
+    margin: 15px 30px 0px 30px;
+    color: #f4f4f2;
+}
+
+.input {
+    margin-top: 5px;
+    display: block;
+    background-color: #495464;
+    color: #f4f4f2;
+}
+
+#editProfileButton {
+    padding: 10px;
+    background-color: #495464;
+    color: #f4f4f2;
+}
+.profileEditButton {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#signinButton {
+    padding: 10px;
+    background-color: #495464;
+    color: #f4f4f2;
+}
+
+/* EDIT PROFILE PART END!!!EDIT PROFILE PART END!!!EDIT PROFILE PART END!!!EDIT PROFILE PART END!!!EDIT PROFILE PART END!!! */
+
+/* SIGNER STARTSIGNER STARTSIGNER STARTSIGNER STARTSIGNER STARTSIGNER STARTSIGNER START */
+
+.signerListItems {
+    color: #f4f4f2;
+}
+
+/* SIGNER ENDSIGNER ENDSIGNER ENDSIGNER ENDSIGNER ENDSIGNER ENDSIGNER ENDSIGNER ENDSIGNER END */
+
+/* navBar PART STARTnavBar PART STARTnavBar PART STARTnavBar PART STARTnavBar PART START */
+
+.navBar {
+    background-color: #e8e8e8;
+    padding: 10px;
+    border: black 2px solid;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+.innerBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.navText {
+    padding: 10px 10px 15px 15px;
+}
+
+.navTitle {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    padding: 10px 10px 15px 15px;
+    font-size: large;
+    font-weight: 200;
+    color: #495464;
+}
+
+/* navBar PART ENDnavBar PART ENDnavBar PART ENDnavBar PART ENDnavBar PART ENDnavBar PART ENDnavBar PART END */

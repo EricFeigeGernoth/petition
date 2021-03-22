@@ -1,0 +1,50 @@
+ 
+  {{#if loggedAndSigned}}
+  
+        <a href="/signer/">
+     
+        <p class="navTitle">signer</p></a>
+        <a href="/profile/edit/">
+        <p class="navTitle">edit Profile</p></a>
+        <a href="/thanks/">
+        <p class="navTitle">thanks</p></a>
+        <a href="/logout/">
+        <p class="navTitle">Log Out</p></a>
+ 
+  {{/if}}
+{{#if LoggedOut}}
+  
+        <a href="/login">
+             <p class="navTitle">Log in</p></a>
+        <a href="/signin/">
+        <p class="navTitle">Sign in</p></a>
+   
+   {{/if}}
+
+
+{{#if ProfileAndSignature}}
+  
+        <a href="/profile">
+             <p class="navTitle">Make your Profile</p></a>
+              <a href="/petition">
+             <p class="navTitle">Sign the petition</p></a>
+        <a href="/logout/">
+        <p class="navTitle">Log Out</p></a>
+   
+   {{/if}}
+
+
+
+
+{{!-- <div class="navText"> <a href="/signer/">
+        <p class="navTitle">signer</p></a></div>
+        <div class="navText"><a href="/profile/edit/">
+        <p class="navTitle">edit Profile</p></a></div>
+        <div class="navText"><a href="/thanks/">
+        <p class="navTitle">thanks</p></a></div>
+        <div class="navText"><a href="/logout/">
+        <p class="navTitle">Log Out</p></a></div> --}}
+
+
+        {{!-- <div class="innerBox">
+        </div> --}}

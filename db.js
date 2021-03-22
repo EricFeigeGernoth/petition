@@ -63,7 +63,11 @@ module.exports.insertProfile = function (age, city, homepage, userID) {
 
 module.exports.getProfileData = function (userID) {
     return db.query(
-        `SELECT users.first, users.last, users.email, user_profiles.age, user_profiles.city, user_profiles.url FROM users JOIN user_profiles ON users.id = user_profiles.user_id WHERE user_profiles.user_id =$1;`,
+        `SELECT users.first, users.last, users.email, 
+            user_profiles.age, user_profiles.city, user_profiles.url 
+            FROM users 
+            LEFT JOIN user_profiles ON users.id = user_profiles.user_id
+            WHERE users.id = $1`,
         [userID]
     );
 };

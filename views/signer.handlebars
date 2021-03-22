@@ -1,7 +1,19 @@
-<h1>signer page</h1>
+ 
+ <div class="edit">
+     
+     
+<div class="navBar"><div class="innerBar">{{> navBar loggedAndSigned=true}}</div></div>
 
+
+<h1 class="titleHeader">See who already signed!</h1>
+<h3 class="subTitle">Click on a city to see all signers of this respective city</h3>
+<div class="editBox">
 <ul>
     {{#rows}}
-    <li> <a href="{{url}}">{{first}} {{last}}</a> {{age}} <a href="/signer/{{city}}">{{city}}</a> </li>
+    <div class="editInputs" ><li> <a class="signerListItems" href="{{url}}">{{first}} {{last}}</a> {{age}} <a class="signerListItems" href="/signer/{{city}}">{{city}}</a> </li></div>
     {{/rows}}
 </ul>
+</div>
+
+
+</div> 
