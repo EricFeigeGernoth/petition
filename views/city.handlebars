@@ -1,7 +1,17 @@
+
+<div class="edit">
+<div class="navBar"><div class="innerBar">{{> navBar loggedAndSigned=true}}</div></div>
+
+
 <h3>We are here in the city</h3>
+
+
+<div class="editBox">
 
 <ul>
     {{#rows}}
-    <li> <a href="{{url}}">{{first}} {{last}}</a> {{age}}  </li>
+    <div class="editInputs" ><li class="signerListItems"> <a class="signerListItems" href="{{url}}">{{first}} {{last}}</a> {{age}}  </li></div>
+    
     {{/rows}}
-</ul>
+</ul></div>
+</div>

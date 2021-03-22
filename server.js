@@ -19,10 +19,10 @@ const {
     updateProfile,
     deleteSignature,
 } = require("./db.js");
-const {
-    superCookieSecret,
-    theOlderaCookieAgesTheBetter,
-} = require("./secrets.json");
+// const {
+//     superCookieSecret,
+//     theOlderaCookieAgesTheBetter,
+// } = require("./secrets.json");
 
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
@@ -30,10 +30,12 @@ app.set("view engine", "handlebars");
 app.use(express.static("./public"));
 app.use(
     cookieSession({
-        secret: `${superCookieSecret}`,
-        maxAge: `${theOlderaCookieAgesTheBetter}`,
+        secret: `carolingian Renaissance`,
+        maxAge: `1000 * 60 * 60 * 24 * 14`,
     })
 );
+// secret: `${superCookieSecret}`,
+// maxAge: `${theOlderaCookieAgesTheBetter}`,
 app.use(express.urlencoded({ extended: false }));
 app.use(csurf());
 app.use(function (req, res, next) {
@@ -385,4 +387,6 @@ app.get("/logout", (req, res) => {
     res.redirect("/login");
 });
 
-app.listen(8080, () => console.log("porty listening on port 8080"));
+app.listen(process.env.PORT || 8080, () =>
+    console.log("porty listening on port 8080")
+);

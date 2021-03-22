@@ -1,7 +1,8 @@
 const spicedPg = require("spiced-pg");
 
 const db = spicedPg(
-    "postgres:ericfeigegernoth:bourne3@localhost:5432/petition"
+    process.env.DATABASE_URL ||
+        "postgres:ericfeigegernoth:bourne3@localhost:5432/petition"
 );
 
 module.exports.addSignInData = function (first, last, email, hashedpassword) {
