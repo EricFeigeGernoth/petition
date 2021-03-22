@@ -82,7 +82,17 @@ h1 {
     background-color: #495464;
     color: #f4f4f2;
 }
+#loginButton {
+    padding: 10px;
+    background-color: #495464;
+    color: #f4f4f2;
+}
 
+#signinButton {
+    padding: 10px;
+    background-color: #495464;
+    color: #f4f4f2;
+}
 /* EDIT PROFILE PART END!!!EDIT PROFILE PART END!!!EDIT PROFILE PART END!!!EDIT PROFILE PART END!!!EDIT PROFILE PART END!!! */
 
 /* SIGNER STARTSIGNER STARTSIGNER STARTSIGNER STARTSIGNER STARTSIGNER STARTSIGNER START */

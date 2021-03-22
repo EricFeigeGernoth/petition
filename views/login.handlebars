@@ -1,19 +1,24 @@
-
+<div class="edit">
 <div class="navBar"><div class="innerBar">{{> navBar LoggedOut=true}}</div></div>
-<p>Hello welcome to the Log In Page</p>
 
+<h1 class="titleHeader">Hello welcome to the Log In Page </h1>
 
 <form method="POST">
-    <label >Please input your email
-        <input name="email"/></label>
+    <div class="editBox">
+
+
+        <div class="editInputs"><label >Please input your email
+        <input class="input" name="email"/></label></div>
+        <div class="editInputs"><label >Please input your password<input class="input" name="password" type="password"/></label></div>
     
-    <label >Please input your password<input name="password" type="password"/></label>
+    
+    
     
     
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
 
-    <label ></label>
-    <button id="loginButton" type="submit">Submit</button>
+    <div class="profileEditButton"><button id="loginButton" type="submit">Submit</button></div></div>
+    
 </form>
 
 {{#if noEmail}}
@@ -23,4 +28,4 @@
         {{>wrongPassword}}
     {{/if}}
 
-<a href="./signin">If you don't already have an account sign in here</a>
+<a href="./signin">If you don't already have an account sign in here</a></div>

@@ -1,17 +1,20 @@
+<div class="edit">
+
 <div class="navBar"><div class="innerBar">{{> navBar LoggedOut=true}}</div></div>
-<p>Welcome to the signin Page</p>
 
+<h1 class="titleHeader">Sign Here </h1>
 
-
+<div class="editBox">
 
 <form method="POST">
-    <label>Please input your first name<input name="first_name"/></label>
-    <label>Please input your last name <input name="last_name"/></label>
+  
+
+    <div class="editInputs"><label>Please input your first name<input class="input" name="first_name"/></label></div>
+    <div class="editInputs"><label>Please input your last name <input class="input" name="last_name"/></label></div>
+    <div class="editInputs"><label >Please input your email
+        <input class="input" name="email"/><label >Please input your password<input class="input" name="password" type="password"/></label></label></div>
+    <div class="editInputs"></div>
     
-    <label >Please input your email
-        <input name="email"/></label>
-    
-    <label >Please input your password<input name="password" type="password"/></label>
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
 
     {{#if empty}}
@@ -20,8 +23,10 @@
     {{#if doubleEmail}}
         {{>emailDuplicated}}
     {{/if}}
+    <div class="profileEditButton"><button id="signinButton" type="submit">Submit</button></div>
     
-    <button id="signinButton" type="submit">Submit</button>
 </form>
-
+</div>
 <a href="/login">Do you already have an account then switch to Log In!</a>
+
+</div>
