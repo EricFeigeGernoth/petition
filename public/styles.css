@@ -68,8 +68,8 @@ h1 {
     object-fit: cover;
 }
 .imageDeath {
-    height: 400px;
-    display: block;
+    height: 500px;
+    object-fit: cover;
     overflow: hidden;
 }
 .landingText {
