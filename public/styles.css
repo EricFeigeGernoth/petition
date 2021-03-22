@@ -33,7 +33,7 @@ h1 {
 }
 
 .wholePage {
-    height: 100vh;
+    height: 200vh;
     background-color: #bbbfca;
 }
 
@@ -69,15 +69,25 @@ h1 {
 }
 .imageDeath {
     height: 400px;
+    display: block;
+    overflow: hidden;
 }
 .landingText {
     width: 600px;
+    margin-bottom: 50px;
 }
 .landingParagraph {
     font-family: Georgia, "Times New Roman", Times, serif;
     font-weight: 400;
-    line-height: 30px;
-    margin: 30px;
+    line-height: 25px;
+    margin: 20px;
+}
+
+.landingParagraph2 {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-weight: bolder;
+    line-height: 25px;
+    margin: 20px;
 }
 /* LANDINGPAGE EndLANDINGPAGE EndLANDINGPAGE EndLANDINGPAGE EndLANDINGPAGE EndLANDINGPAGE EndLANDINGPAGE EndLANDINGPAGE End */
 
