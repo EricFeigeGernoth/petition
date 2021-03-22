@@ -1,18 +1,36 @@
+
+<div class="edit">
+
 <div class="navBar"><div class="innerBar">{{> navBar ProfileAndSignature=true}}</div></div>
-<h1>Hello I am on the petition Page</h1>
-<form method="POST">
+<h1 class="titleHeader">You're almost there</h1>
+<h1 class="titleHeader">Sign Here!</h1>
+
+<div class="petitionContainer">
+    <div class="imageContainer">
+            <label class="landingLabel" >Completely natural hair growth of a latin speaker!
+            <img class="imageBand" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Christoph_Bernhard_Francke_-_Bildnis_des_Philosophen_Leibniz_%28ca._1695%29.jpg/389px-Christoph_Bernhard_Francke_-_Bildnis_des_Philosophen_Leibniz_%28ca._1695%29.jpg" alt="super hip latin speaking band"></label>
+            {{!-- <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Christoph_Bernhard_Francke_-_Bildnis_des_Philosophen_Leibniz_%28ca._1695%29.jpg/389px-Christoph_Bernhard_Francke_-_Bildnis_des_Philosophen_Leibniz_%28ca._1695%29.jpg" alt="totally natural hair"> --}}
+
+        </div>
+    {{!-- <div class="petitionImage"></div> --}}
+
+    <div class="petitionSignature">
+        
+        <form method="POST">
     {{!-- <input name="first_name"/>
     <input name="last_name"/> --}}
     <input name="signature" type="hidden"/>
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
-
-    <canvas id="canvas" width="400" height="400"></canvas>
-    <button id="petitionButton" type="submit">Submit</button>
+<div class="petitionSignatureCanvas"><canvas id="canvas" width="400" height="400"></canvas></div>
+    
+   <div class="petitionBut"><button id="petitionButton" type="submit">Signed</button></div> 
 </form>
-<a href="/logout">Logout? Click here</a>
+
 
  {{#if noSignature}}
         {{>noSignature}}
-    {{/if}}
+    {{/if}}</div>
+</div>
 
+</div>
  {{!-- <input name="signature" type="hidden"/> --}}

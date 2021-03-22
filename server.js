@@ -346,6 +346,7 @@ app.get("/thanks", requireSignature, (req, res) => {
     // console.log("sigID: !!!!!!!!!!!!", sigID);
     showSignature(sigID).then((data) => {
         // console.log("thanks data.rows:", data);
+        // console.log("first name", data.rows[0].first_name);
         res.render("thanks", {
             layout: "main",
             title: "thanks",

@@ -1,24 +1,36 @@
 <div class="edit">
-<div class="navBar"><div class="innerBar">{{> navBar loggedAndSigned=true}}</div></div></div>
+<div class="navBar"><div class="innerBar">{{> navBar loggedAndSigned=true}}</div></div>
  
 
-<h1>thanks Page</h1>
+<h1 class="titleHeader">Gratias tibi ago</h1>
 
 
-<p>{{firstName}} {{lastName}} you're the first Person alive to sign this petition.</p>
- <img src="{{imgURL}}" alt="signatureImage">
+<p>You're one of the first few persons alive to sign this petition.</p>
 
 
+<div class="thanksContainer">
+    
+    <div class="thanksLeft">
+        <h4 class="thanksSubTitle">Take a look at the rich cultural heritage of latin classics!</h4>
+         <p class="thanksText">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>     </div>
+<div class="thanksMain"><div class="thanksSignature" ><img class="backgroundCanvas" src="{{imgURL}}" alt="signatureImage"></div>
 
 
-<form method="POST">
+<div class="deleteButton"><form method="POST">
    
     
     <button id="deleteSignature" type="submit">Delete your signature</button>
      <input type="hidden" name="_csrf" value="{{csrfToken}}">
-</form>
+</form></div></div>
+<div class="thanksRight">
+    
+    <h4 class="thanksSubTitle">The wisdom of 2000 years of latin high-culture will soon be in your grasp!</h4>
+    <p class="thanksText">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p> </div></div>
+
+ 
 
 
-<a href="/profile/edit">Would you like to change your profile?</a>
-<a href="/signer">Are you curious who already signed?</a>
-<a href="/logout">Logout? Click here</a>
+
+
+
+</div>
