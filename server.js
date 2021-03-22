@@ -46,8 +46,13 @@ app.use(function (req, res, next) {
 
 app.use((req, res, next) => {
     // console.log("Am I here?");
-    if (!req.session.userId && req.url != "/signin" && req.url != "/login") {
-        // console.log("Am I before login?");
+    if (
+        !req.session.userId &&
+        req.url != "/signin" &&
+        req.url != "/login" &&
+        req.url != "/"
+    ) {
+        console.log("Am I before login?");
         console.log("req.url: ", req.url);
         try {
             return res.redirect("/signin");
@@ -83,7 +88,11 @@ const requireSignature = (req, res, next) => {
 };
 
 app.get("/", requireLoggedOutUser, (req, res) => {
-    res.redirect("/login");
+    res.render("landing", {
+        layout: "main",
+        title: "Landing Page",
+    });
+    // res.redirect("/login");
 });
 
 app.get("/login", requireLoggedOutUser, (req, res) => {
