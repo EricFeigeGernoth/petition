@@ -253,12 +253,21 @@ app.get("/profile/edit", requireSignature, (req, res) => {
     console.log("petition userID", req.session.userId);
     getProfileData(req.session.userId).then((getedit) => {
         console.log("getedit", getedit);
-
-        res.render("edit", {
-            layout: "main",
-            title: "edit",
-            data: getedit.rows[0],
-        });
+        if (req.session.editId) {
+            req.session.editId = null;
+            res.render("edit", {
+                layout: "main",
+                title: "edit",
+                data: getedit.rows[0],
+                empty: true,
+            });
+        } else {
+            res.render("edit", {
+                layout: "main",
+                title: "edit",
+                data: getedit.rows[0],
+            });
+        }
     });
 });
 
@@ -277,28 +286,33 @@ app.post("/profile/edit", requireSignature, (req, res) => {
     } = req.body;
     console.log(email);
     console.log(password);
-    if (password == false) {
-        console.log("password empty");
-        updateUsersWithoutPassword(first_name, last_name, email, id);
-        console.log("I am past update");
+    if (age == "" && city == "" && homepage == "") {
+        req.session.editId = id;
+        res.redirect("/profile/edit");
     } else {
-        hash(password).then((hashedPassword) => {
-            console.log("hashedpassword:   ", hashedPassword);
+        if (password == false) {
+            console.log("password empty");
+            updateUsersWithoutPassword(first_name, last_name, email, id);
+            console.log("I am past update");
+        } else {
+            hash(password).then((hashedPassword) => {
+                console.log("hashedpassword:   ", hashedPassword);
 
-            updateUserWithPassword(
-                first_name,
-                last_name,
-                email,
-                hashedPassword,
-                id
-            );
-            console.log("Afer changing password");
+                updateUserWithPassword(
+                    first_name,
+                    last_name,
+                    email,
+                    hashedPassword,
+                    id
+                );
+                console.log("Afer changing password");
+            });
+        }
+        updateProfile(age, city, homepage, id).then((editedData) => {
+            console.log("editedData:  ", editedData);
+            res.redirect("/profile/edit");
         });
     }
-    updateProfile(age, city, homepage, id).then((editedData) => {
-        console.log("editedData:  ", editedData);
-        res.redirect("/profile/edit");
-    });
 });
 
 app.get("/petition", requireNosignature, (req, res) => {
